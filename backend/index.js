@@ -48,6 +48,7 @@ app.post('/upload',upload.single('product'),(req,res)=>{
 const productSChema = mongoose.Schema({
     id:{ type:Number , required:true},
     name:{ type:String, required:true},
+    image: { type: String, required: true },
     category:{type:String,required:true},
     new_price:{type:Number,required:true},
     old_price:{type:Number,required:true},
@@ -58,15 +59,17 @@ const productSChema = mongoose.Schema({
 const Product = mongoose.model('Product',productSChema)
 
 app.post('/addproduct',async(req,res)=>{
+    console.log(`req.body` , req.body);
     const {name,image,category,new_price,old_price} = req.body
+    console.log('image ' , image);
     let products = await Product.find({})
     let id = 1;
     if(products.length>0) {
         let lastProductArray = products.slice(-1);
         let lastProduct = lastProductArray[0];
         id = lastProduct.id+1
-    }
-
+    } 
+     
     const product = new Product({
         id:id,
         name:name,
@@ -75,12 +78,11 @@ app.post('/addproduct',async(req,res)=>{
         new_price:new_price,
         old_price:old_price
     })
-    console.log({product});
-    await product.save(); // adding product to database
-    console.log('product saved');
+
+    await product.save(); // adding product to database     
     res.json({
-        success:true,name:req.body.name
-    })
+        success:true, product : product
+    }) 
 })
 
 //creating api for deleting product
