@@ -44,6 +44,7 @@ app.post('/upload',upload.single('product'),(req,res)=>{
 })
 
 
+
 //schema for adding product
 const productSChema = mongoose.Schema({
     id:{ type:Number , required:true},
